@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "builds": [],
+  "routes": [
+    {
+      "src": "/growtopia/server_data.php",
+      "methods": ["POST"],
+      "dest": "/api/server_data.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/$1"
+    }
+  ]
+}
