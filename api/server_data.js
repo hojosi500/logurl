@@ -1,13 +1,8 @@
 export default function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).send('Method Not Allowed');
-  }
-
-  // Ganti IP dan port GTPS kamu di bawah ini:
-  const serverIP = '127.0.0.1';
+  const serverIP = '127.0.0.1'; // ganti sesuai IP server GTPS kamu
   const serverPort = '17091';
 
-  const response = [
+  const result = [
     `server|${serverIP}`,
     `port|${serverPort}`,
     'type|1',
@@ -17,5 +12,5 @@ export default function handler(req, res) {
   ].join('\n');
 
   res.setHeader('Content-Type', 'text/plain');
-  res.status(200).send(response);
+  res.status(200).send(result);
 }
