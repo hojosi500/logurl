@@ -1,13 +1,13 @@
 export default function handler(req, res) {
-  const ip = '127.0.0.1'; // atau IP GTPS kamu
-  const port = '17091';
+  const serverIP = '127.0.0.1';      // GANTI jika GTPS kamu ada di VPS
+  const serverPort = '17091';
 
   const response = [
-    `server|${ip}`,
-    `port|${port}`,
+    `server|${serverIP}`,
+    `port|${serverPort}`,
     'type|1',
     '#maint|Maintenance',
-    `meta|name=GTPS Server&ip=${ip}&port=${port}&3rd=0`,
+    `meta|name=GTPS Server&ip=${serverIP}&port=${serverPort}&3rd=0`,
     'RTENDMARKERBS1001'
   ].join('\n');
 
