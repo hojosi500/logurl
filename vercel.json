@@ -2,8 +2,9 @@
   "version": 2,
   "routes": [
     {
-      "src": "/growtopia/server_data.php",
-      "dest": "/api/growtopia.php.js"
+      "src": "/player/login/dashboard",
+      "methods": ["GET", "POST"],
+      "dest": "/api/player/login/dashboard.js"
     },
     {
       "src": "/(.*)",
