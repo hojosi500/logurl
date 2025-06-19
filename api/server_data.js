@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   const responseText = `
 server|127.0.0.1
 port|17091
-loginurl|${httpBase}/api/login
+loginurl|${httpBase}
 
 #maint|Maintenance
 type|1
