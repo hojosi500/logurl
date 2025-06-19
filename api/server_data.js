@@ -8,7 +8,7 @@ export default function handler(req, res) {
   res.send(
     `server|${ip}\n` +
     `port|17091\n` +
-    `loginurl|https://${process.env.VERCEL_URL}\n` +
+    `loginurl|logurl-beta.vercel.app\n` +
     `#maint|Maintenance\n` +
     `type|1\n` +
     `meta|name=GTPS Server&ip=${ip}&port=17091&3rd=0\n` +
