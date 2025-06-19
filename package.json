@@ -1,7 +1,0 @@
-{
-  "name": "gtps-login-backend",
-  "type": "module",
-  "dependencies": {
-    "jsonwebtoken": "^9.0.2"
-  }
-}
