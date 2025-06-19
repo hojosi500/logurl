@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login GTPS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-800">
+  <div class="min-h-screen flex items-center justify-center">
+    <form id="loginForm" class="space-y-4 w-full max-w-sm">
+      <h2 class="text-2xl font-bold text-center">GTPS Login</h2>
+
+      <input type="text" name="growid" placeholder="GrowID"
+        class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+
+      <input type="password" name="password" placeholder="Password"
+        class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+
+      <button type="submit"
+        class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded font-semibold transition">
+        Login
+      </button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').onsubmit = async function (e) {
+      e.preventDefault();
+
+      const growid = e.target.growid.value;
+      const password = e.target.password.value;
+      const payload = `requestedName|${growid}\ntankIDPass|${password}`;
+
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: payload
+      });
+
+      const text = await res.text();
+      if (text.includes('tankIDName')) {
+        alert('Login berhasil!');
+        localStorage.setItem('growid', growid);
+        window.location.href = '/dashboard.html';
+      } else {
+        alert('Login gagal:\n' + text);
+      }
+    };
+  </script>
+</body>
+</html>

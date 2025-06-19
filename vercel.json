@@ -1,0 +1,6 @@
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/growtopia/server_data.php", "destination": "/api/server_data" }
+  ]
+}
