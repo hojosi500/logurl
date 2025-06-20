@@ -1,72 +1,93 @@
-<!-- public/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>GTPS Login</title>
   <style>
     body {
-      font-family: sans-serif;
-      background: #222;
-      color: #fff;
+      font-family: Arial, sans-serif;
+      background: #1e1e1e;
+      color: white;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       height: 100vh;
     }
-    .login-box {
-      background: #333;
+    .form-box {
+      background: #2c2c2c;
       padding: 30px;
-      border-radius: 8px;
+      border-radius: 10px;
       width: 300px;
+      box-shadow: 0 0 10px #000;
     }
     input, button {
       width: 100%;
       margin: 10px 0;
       padding: 10px;
       border: none;
-      border-radius: 4px;
+      border-radius: 5px;
     }
     button {
       background: #4caf50;
       color: white;
-      cursor: pointer;
+      font-weight: bold;
+    }
+    #status {
+      margin-top: 10px;
+      color: orange;
     }
   </style>
 </head>
 <body>
-  <div class="login-box">
+  <div class="form-box">
     <h2>GTPS Login</h2>
-    <input type="text" id="growid" placeholder="GrowID">
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="submitLogin()">Login</button>
-    <p id="status"></p>
+    <input type="text" id="growid" placeholder="GrowID" />
+    <input type="password" id="password" placeholder="Password" />
+    <button onclick="login()">Login</button>
+    <div id="status"></div>
   </div>
 
   <script>
-    async function submitLogin() {
-      const growid = document.getElementById("growid").value.trim();
-      const password = document.getElementById("password").value.trim();
+    async function getGtpsIp() {
+      try {
+        const res = await fetch("http://your-gtps-http-ip/server_data.php");
+        const text = await res.text();
+
+        const match = text.match(/server\|(.+)/);
+        return match ? match[1].trim() : null;
+      } catch (e) {
+        console.error("Gagal membaca server_data.php", e);
+        return null;
+      }
+    }
+
+    async function login() {
+      const growid = document.getElementById("growid").value;
+      const password = document.getElementById("password").value;
       const status = document.getElementById("status");
 
-      if (!growid || !password) {
-        status.textContent = "Isi GrowID dan Password";
+      status.textContent = "Menghubungkan ke server...";
+
+      const gtpsIp = await getGtpsIp();
+      if (!gtpsIp) {
+        status.textContent = "Gagal membaca IP server dari GTPS.";
         return;
       }
 
-      const res = await fetch('/api/auth', {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ growid, password })
-      });
+      try {
+        const response = await fetch(`http://${gtpsIp}:17091`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: `tankid=${encodeURIComponent(growid)}&password=${encodeURIComponent(password)}`
+        });
 
-      const result = await res.json();
-
-      if (result.success) {
-        status.textContent = "Login sukses!";
-        window.location.href = "/player/login/dashboard"; // Redirect ke loginurl
-      } else {
-        status.textContent = result.message || "Login gagal!";
+        const result = await response.text();
+        status.textContent = "Respon dari server: " + result;
+      } catch (err) {
+        console.error(err);
+        status.textContent = "Gagal menghubungi GTPS.";
       }
     }
   </script>
