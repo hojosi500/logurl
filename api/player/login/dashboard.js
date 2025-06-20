@@ -1,16 +1,14 @@
-export default function handler(req, res) {
-  const ip =
-    req.headers["x-forwarded-for"] ||
-    req.connection?.remoteAddress ||
-    "127.0.0.1";
+// File: api/player/login/dashboard.js
 
-  const serverData = `
-server|${ip}
-port|17091
-type|1
-#maint|Maintenance
-meta|name=GTPS Server&port=17091&ip=${ip}
+export default function handler(req, res) {
+  const dialog = `
+add_label_with_icon|big|GTPS Login|left|6016|
+add_text_input|tankid|GrowID||0|
+add_text_input|password|Password||1|
+add_button|login|Login|noflags|
+add_quick_exit|
+end_dialog|gtps_login
 `;
 
-  res.status(200).send(serverData.trim());
+  res.status(200).send(dialog.trim());
 }
