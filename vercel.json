@@ -1,5 +1,12 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/public/index.html" }
+    {
+      "source": "/player/login/dashboard",
+      "destination": "/api/player/login/dashboard"
+    },
+    {
+      "source": "/",
+      "destination": "/public/index.html"
+    }
   ]
 }
