@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>GTPS Login</title>
+  <title>GTPS Login/Register</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -40,54 +40,52 @@
 </head>
 <body>
   <div class="form-box">
-    <h2>GTPS Login</h2>
+    <h2>GTPS Login / Register</h2>
     <input type="text" id="growid" placeholder="GrowID" />
     <input type="password" id="password" placeholder="Password" />
     <button onclick="login()">Login</button>
+    <button onclick="register()">Register</button>
     <div id="status"></div>
   </div>
 
   <script>
-    async function getGtpsIp() {
-      try {
-        const res = await fetch("http://your-gtps-http-ip/server_data.php");
-        const text = await res.text();
-
-        const match = text.match(/server\|(.+)/);
-        return match ? match[1].trim() : null;
-      } catch (e) {
-        console.error("Gagal membaca server_data.php", e);
-        return null;
-      }
-    }
-
     async function login() {
       const growid = document.getElementById("growid").value;
       const password = document.getElementById("password").value;
       const status = document.getElementById("status");
 
-      status.textContent = "Menghubungkan ke server...";
-
-      const gtpsIp = await getGtpsIp();
-      if (!gtpsIp) {
-        status.textContent = "Gagal membaca IP server dari GTPS.";
-        return;
-      }
+      status.textContent = "Proses login...";
 
       try {
-        const response = await fetch(`http://${gtpsIp}:17091`, {
+        const res = await fetch("/api/proxy-login", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          },
-          body: `tankid=${encodeURIComponent(growid)}&password=${encodeURIComponent(password)}`
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ growid, password })
         });
-
-        const result = await response.text();
-        status.textContent = "Respon dari server: " + result;
+        const text = await res.text();
+        status.textContent = "Login response: " + text;
       } catch (err) {
-        console.error(err);
-        status.textContent = "Gagal menghubungi GTPS.";
+        status.textContent = "Gagal login.";
+      }
+    }
+
+    async function register() {
+      const growid = document.getElementById("growid").value;
+      const password = document.getElementById("password").value;
+      const status = document.getElementById("status");
+
+      status.textContent = "Proses register...";
+
+      try {
+        const res = await fetch("/api/proxy-register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ growid, password })
+        });
+        const text = await res.text();
+        status.textContent = "Register response: " + text;
+      } catch (err) {
+        status.textContent = "Gagal register.";
       }
     }
   </script>
